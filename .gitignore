@@ -1,0 +1,23 @@
+# Ignore object files and executable files
+*.o
+*.out
+*.exe
+*.log
+
+# Ignore the build directory
+build/
+
+# Ignore the target executable
+main
+
+# Ignore system files
+.DS_Store
+
+# Ignore VS Code settings and workspace files
+.vscode/
+
+# Ignore IDE project files
+.idea/
+
+# Ignore backup files
+*~
