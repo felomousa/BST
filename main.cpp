@@ -58,7 +58,7 @@ private:
         if (node != nullptr)
         {
             traverseInOrder(node->nodeLeft);
-            cout << node->nodeValue << "\n";
+            cout << node->nodeValue << endl;
             traverseInOrder(node->nodeRight);
         }
     }
@@ -77,7 +77,7 @@ private:
         {
             traversePostOrder(node->nodeLeft);
             traversePostOrder(node->nodeRight);
-            cout << node->nodeValue << "\n";
+            cout << node->nodeValue << endl;
         }
     }
 
@@ -133,12 +133,57 @@ void bstFiller(BinarySearchTree<T> &bst)
 
 int main()
 {
-    BinarySearchTree<int> BST;
-    // BinarySearchTree<double> BST;
+    // BinarySearchTree<int> BST;
+    // // BinarySearchTree<double> BST;
 
-    srand(time(NULL));
+    // srand(time(NULL));
 
-    bstFiller(BST);
+    // bstFiller(BST);
+
+    // cout << "In-order traversal:" << endl; // Ascending Order
+    // BST.inOrder();
+
+    // cout << "Pre-order traversal:" << endl;
+    // BST.preOrder();
+
+    // cout << "Post-order traversal:" << endl;
+    // BST.postOrder();
+
+    // cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
+
+    // cout << "Max Value: " << BST.maxValue() << endl;
+    // cout << "Min Value: " << BST.minValue() << endl;
+
+    int inputType;
+    cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n";
+    cin >> inputType;
+
+    BinarySearchTree<int> BST; // default
+
+    switch (inputType)
+    {
+    case 1:
+    {
+        BinarySearchTree<int> BST;
+        cout << "Selected <int>\n";
+        break;
+    }
+    case 2:
+    {
+        BinarySearchTree<double> BST;
+        cout << "Selected <double>\n";
+        break;
+    }
+    }
+
+    cout << "Enter 5 values to insert into the BST\n";
+
+    for (int i = 0; i < 5; ++i)
+    {
+        float value;
+        cin >> value;
+        BST.insertNode(value);
+    }
 
     cout << "In-order traversal:" << endl; // Ascending Order
     BST.inOrder();
