@@ -94,7 +94,15 @@ int main()
 {
     BinarySearchTree BST;
 
-    cout << "In-order traversal:" << endl;
+    srand(time(NULL));
+
+    for (int i = 0; i < 5; ++i)
+    {
+        int randomValue = rand() % 20 + 1;
+        BST.insertNode(randomValue);
+    }
+
+    cout << "In-order traversal:" << endl; // Ascending Order
     BST.inOrder();
 
     cout << "Pre-order traversal:" << endl;
@@ -102,6 +110,8 @@ int main()
 
     cout << "Post-order traversal:" << endl;
     BST.postOrder();
+
+    cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
 
     return 0;
 }
