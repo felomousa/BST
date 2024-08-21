@@ -1,23 +1,25 @@
 #include <iostream>
 using namespace std;
 
+template <typename T>
 struct TreeNode
 {
-    int nodeValue;
+    T nodeValue;
     TreeNode *nodeLeft;
     TreeNode *nodeRight;
-    TreeNode(int nodeValue) : nodeValue(nodeValue), nodeLeft(nullptr), nodeRight(nullptr) {};
+    TreeNode(T nodeValue) : nodeValue(nodeValue), nodeLeft(nullptr), nodeRight(nullptr) {};
 };
 
+template <typename T>
 class BinarySearchTree
 {
 private:
-    TreeNode *root;
-    TreeNode *insertNode(TreeNode *node, int value)
+    TreeNode<T> *root;
+    TreeNode<T> *insertNode(TreeNode<T> *node, T value)
     {
         if (node == nullptr)
         {
-            root = new TreeNode(value);
+            root = new TreeNode<T>(value);
             return root;
         }
 
@@ -32,7 +34,7 @@ private:
 
         return node;
     }
-    bool search(TreeNode *node, int value)
+    bool search(TreeNode<T> *node, T value)
     {
         if (node == nullptr)
         {
@@ -51,7 +53,7 @@ private:
             return search(node->nodeRight, value);
         }
     }
-    void traverseInOrder(TreeNode *node)
+    void traverseInOrder(TreeNode<T> *node)
     {
         if (node != nullptr)
         {
@@ -60,7 +62,7 @@ private:
             traverseInOrder(node->nodeRight);
         }
     }
-    void traversePreOrder(TreeNode *node)
+    void traversePreOrder(TreeNode<T> *node)
     {
         if (node != nullptr)
         {
@@ -69,7 +71,7 @@ private:
             traversePreOrder(node->nodeRight);
         }
     }
-    void traversePostOrder(TreeNode *node)
+    void traversePostOrder(TreeNode<T> *node)
     {
         if (node != nullptr)
         {
@@ -79,7 +81,7 @@ private:
         }
     }
 
-    int minValue(TreeNode *node)
+    T minValue(TreeNode<T> *node)
     {
         if (node == nullptr)
         {
@@ -92,7 +94,7 @@ private:
         return minValue(node->nodeLeft);
     }
 
-    int maxValue(TreeNode *node)
+    T maxValue(TreeNode<T> *node)
     {
         if (node == nullptr)
         {
@@ -106,30 +108,37 @@ private:
     }
 
 public:
-    void insertNode(int value) { root = insertNode(root, value); };
-    bool search(int value) { return search(root, value); }
+    void insertNode(T value) { root = insertNode(root, value); };
+    bool search(T value) { return search(root, value); }
 
     void inOrder() { traverseInOrder(root); };
     void preOrder() { traversePreOrder(root); };
     void postOrder() { traversePostOrder(root); };
 
-    int minValue() { return minValue(root); }
-    int maxValue() { return maxValue(root); }
+    T minValue() { return minValue(root); }
+    T maxValue() { return maxValue(root); }
 
     BinarySearchTree() { root = nullptr; }
 };
 
+template <typename T>
+void bstFiller(BinarySearchTree<T> &bst)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        T randomValue = (rand() % 20000) / 1000.0;
+        bst.insertNode(randomValue);
+    }
+}
+
 int main()
 {
-    BinarySearchTree BST;
+    BinarySearchTree<int> BST;
+    // BinarySearchTree<double> BST;
 
     srand(time(NULL));
 
-    for (int i = 0; i < 5; ++i)
-    {
-        int randomValue = rand() % 20 + 1;
-        BST.insertNode(randomValue);
-    }
+    bstFiller(BST);
 
     cout << "In-order traversal:" << endl; // Ascending Order
     BST.inOrder();
@@ -142,8 +151,8 @@ int main()
 
     cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
 
-    cout << "Max Value:" << BST.maxValue() << endl;
-    cout << "Min Value:" << BST.minValue() << endl;
+    cout << "Max Value: " << BST.maxValue() << endl;
+    cout << "Min Value: " << BST.minValue() << endl;
 
     return 0;
 }
