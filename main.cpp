@@ -79,6 +79,32 @@ private:
         }
     }
 
+    int minValue(TreeNode *node)
+    {
+        if (node == nullptr)
+        {
+            throw invalid_argument("Invalid Tree");
+        }
+        if (node->nodeLeft == nullptr)
+        {
+            return node->nodeValue;
+        }
+        return minValue(node->nodeLeft);
+    }
+
+    int maxValue(TreeNode *node)
+    {
+        if (node == nullptr)
+        {
+            throw invalid_argument("Invalid Tree");
+        }
+        if (node->nodeRight == nullptr)
+        {
+            return node->nodeValue;
+        }
+        return maxValue(node->nodeRight);
+    }
+
 public:
     void insertNode(int value) { root = insertNode(root, value); };
     bool search(int value) { return search(root, value); }
@@ -86,6 +112,9 @@ public:
     void inOrder() { traverseInOrder(root); };
     void preOrder() { traversePreOrder(root); };
     void postOrder() { traversePostOrder(root); };
+
+    int minValue() { return minValue(root); }
+    int maxValue() { return maxValue(root); }
 
     BinarySearchTree() { root = nullptr; }
 };
@@ -112,6 +141,9 @@ int main()
     BST.postOrder();
 
     cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
+
+    cout << "Max Value:" << BST.maxValue() << endl;
+    cout << "Min Value:" << BST.minValue() << endl;
 
     return 0;
 }
