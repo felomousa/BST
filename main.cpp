@@ -58,7 +58,7 @@ private:
         if (node != nullptr)
         {
             traverseInOrder(node->nodeLeft);
-            cout << node->nodeValue << endl;
+            cout << node->nodeValue << " → ";
             traverseInOrder(node->nodeRight);
         }
     }
@@ -66,7 +66,7 @@ private:
     {
         if (node != nullptr)
         {
-            cout << node->nodeValue << "\n";
+            cout << node->nodeValue << " → ";
             traversePreOrder(node->nodeLeft);
             traversePreOrder(node->nodeRight);
         }
@@ -77,7 +77,7 @@ private:
         {
             traversePostOrder(node->nodeLeft);
             traversePostOrder(node->nodeRight);
-            cout << node->nodeValue << endl;
+            cout << node->nodeValue << " → ";
         }
     }
 
@@ -112,7 +112,7 @@ private:
         if (node == nullptr)
             return;
         cout << prefix;
-        cout << (leftNode ? "├─ " : "└─ ") << node->nodeValue << endl;
+        cout << (leftNode ? "├─ " : "└─ ") << node->nodeValue << (leftNode ? " (L)" : " (R)") << endl;
         dispTree(node->nodeLeft, true, prefix + (leftNode ? "│  " : "   "));
         dispTree(node->nodeRight, false, prefix + (leftNode ? "│  " : "   "));
     }
@@ -136,6 +136,8 @@ public:
 template <typename T>
 void bstFiller(BinarySearchTree<T> &bst)
 {
+    srand(time(NULL));
+
     for (int i = 0; i < 5; ++i)
     {
         T randomValue = (rand() % 20000) / 1000.0;
@@ -145,77 +147,69 @@ void bstFiller(BinarySearchTree<T> &bst)
 
 int main()
 {
-    // BinarySearchTree<int> BST;
-    // // BinarySearchTree<double> BST;
-
-    // srand(time(NULL));
-
-    // bstFiller(BST);
-
-    // cout << "In-order traversal:" << endl; // Ascending Order
-    // BST.inOrder();
-
-    // cout << "Pre-order traversal:" << endl;
-    // BST.preOrder();
-
-    // cout << "Post-order traversal:" << endl;
-    // BST.postOrder();
-
-    // cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
-
-    // cout << "Max Value: " << BST.maxValue() << endl;
-    // cout << "Min Value: " << BST.minValue() << endl;
-
     int inputType;
     cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n";
     cin >> inputType;
 
-    BinarySearchTree<int> BST; // default
+    BinarySearchTree<double> BST; // default
 
-    switch (inputType) // still need string support
+    // if (inputType == 1) // This doesn't work. need to find another way to select type, BST is only declared locally within the IF statement.
+    // {
+    //     BinarySearchTree<int> BST;
+    //     cout << "Selected <int>\n";
+    // }
+    // else if (inputType == 2)
+    // {
+    //     BinarySearchTree<double> BST;
+    //     cout << "Selected <double>\n";
+    // }
+
+    char choice{};
+    cout << "Would you like to use randomly generated values to populate the BST? (y/n)";
+    cin >> choice;
+
+    if (choice == 'y')
     {
-    case 1:
+        bstFiller(BST);
+    }
+    else
     {
-        BinarySearchTree<int> BST;
-        cout << "Selected <int>\n";
-        break;
-    }
-    case 2:
-    {
-        BinarySearchTree<double> BST;
-        cout << "Selected <double>\n";
-        break;
-    }
-    }
+        cout << "Enter values to insert into the BST. Enter -1 to stop :D\n";
 
-    cout << "Enter values to insert into the BST. Enter -1 to stop :D\n";
+        while (true)
+        {
+            float value;
+            cin >> value;
+            if (value == -1)
+                break;
+            cout << "\n\n\n\n\n";
 
-    while (true)
-    {
-        float value;
-        cin >> value;
-        if (value == -1)
-            break;
-        cout << "\n\n\n\n\n";
-
-        BST.insertNode(value);
-        BST.dispTree();
-        cout << endl;
+            BST.insertNode(value);
+            BST.dispTree();
+            cout << endl;
+        }
     }
 
+    cout << endl;
     cout << "In-order traversal:" << endl; // Ascending Order
     BST.inOrder();
+    cout << endl;
 
     cout << "Pre-order traversal:" << endl;
     BST.preOrder();
+    cout << endl;
 
     cout << "Post-order traversal:" << endl;
     BST.postOrder();
+    cout << endl;
 
     cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
 
     cout << "Max Value: " << BST.maxValue() << endl;
     cout << "Min Value: " << BST.minValue() << endl;
+
+    cout << "Completed BST: \n";
+    BST.dispTree();
 
     return 0;
 }
