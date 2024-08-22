@@ -107,6 +107,16 @@ private:
         return maxValue(node->nodeRight);
     }
 
+    void dispTree(TreeNode<T> *node, bool leftNode = true, string prefix = "")
+    {
+        if (node == nullptr)
+            return;
+        cout << prefix;
+        cout << (leftNode ? "├─ " : "└─ ") << node->nodeValue << endl;
+        dispTree(node->nodeLeft, true, prefix + (leftNode ? "│  " : "   "));
+        dispTree(node->nodeRight, false, prefix + (leftNode ? "│  " : "   "));
+    }
+
 public:
     void insertNode(T value) { root = insertNode(root, value); };
     bool search(T value) { return search(root, value); }
@@ -117,6 +127,8 @@ public:
 
     T minValue() { return minValue(root); }
     T maxValue() { return maxValue(root); }
+
+    void dispTree() { dispTree(root); }
 
     BinarySearchTree() { root = nullptr; }
 };
@@ -160,7 +172,7 @@ int main()
 
     BinarySearchTree<int> BST; // default
 
-    switch (inputType)
+    switch (inputType) // still need string support
     {
     case 1:
     {
@@ -176,13 +188,19 @@ int main()
     }
     }
 
-    cout << "Enter 5 values to insert into the BST\n";
+    cout << "Enter values to insert into the BST. Enter -1 to stop :D\n";
 
-    for (int i = 0; i < 5; ++i)
+    while (true)
     {
         float value;
         cin >> value;
+        if (value == -1)
+            break;
+        cout << "\n\n\n\n\n";
+
         BST.insertNode(value);
+        BST.dispTree();
+        cout << endl;
     }
 
     cout << "In-order traversal:" << endl; // Ascending Order
