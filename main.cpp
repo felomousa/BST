@@ -22,8 +22,7 @@ private:
     {
         if (node == nullptr)
         {
-            root = new TreeNode<T>(value);
-            return root;
+            return new TreeNode<T>(value);
         }
 
         if (value < node->nodeValue)
@@ -120,20 +119,40 @@ private:
         dispTree(node->nodeRight, false, prefix + (leftNode ? "│  " : "   "));
     }
 
+    void deleteTree(TreeNode<T> *node)
+    {
+        if (node == nullptr)
+            return;
+        deleteTree(node->nodeLeft);
+        deleteTree(node->nodeRight);
+        delete node;
+    }
+
 public:
-    void insertNode(T value) { root = insertNode(root, value); };
+    BinarySearchTree() { root = nullptr; }
+
+    ~BinarySearchTree() { deleteTree(root); }
+    void insertNode(T value)
+    {
+        if (root == nullptr)
+        {
+            root = new TreeNode<T>(value);
+        }
+        else
+        {
+            root = insertNode(root, value);
+        }
+    }
     bool search(T value) { return search(root, value); }
 
-    void inOrder() { traverseInOrder(root); };
-    void preOrder() { traversePreOrder(root); };
-    void postOrder() { traversePostOrder(root); };
+    void inOrder() { traverseInOrder(root); }
+    void preOrder() { traversePreOrder(root); }
+    void postOrder() { traversePostOrder(root); }
 
     T minValue() { return minValue(root); }
     T maxValue() { return maxValue(root); }
 
     void dispTree() { dispTree(root); }
-
-    BinarySearchTree() { root = nullptr; }
 };
 
 template <typename T>
