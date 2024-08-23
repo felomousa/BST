@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 using namespace std;
 
 template <typename T>
@@ -145,43 +148,75 @@ void bstFiller(BinarySearchTree<T> &bst)
     }
 }
 
-int main()
+vector<string> randomWords(const string path)
 {
-    int inputType;
-    cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n";
-    cin >> inputType;
+    vector<string> words;
+    string word;
+    ifstream file(path);
+    while (getline(file, word))
+    {
+        words.push_back(word);
+    }
+    file.close();
+    return words;
+}
 
-    BinarySearchTree<double> BST; // default
+template <typename T>
+void bstStringFiller(BinarySearchTree<T> &bst, vector<string> words)
+{
+    srand(time(NULL));
 
-    // if (inputType == 1) // This doesn't work. need to find another way to select type, BST is only declared locally within the IF statement.
-    // {
-    //     BinarySearchTree<int> BST;
-    //     cout << "Selected <int>\n";
-    // }
-    // else if (inputType == 2)
-    // {
-    //     BinarySearchTree<double> BST;
-    //     cout << "Selected <double>\n";
-    // }
+    for (int i = 0; i < 10; ++i)
+    {
+        int randLine = rand() % words.size();
 
+        T randomWord = words[randLine];
+        bst.insertNode(randomWord);
+    }
+}
+
+template <typename T>
+bool terminateValue(const T &value)
+{
+    if constexpr (is_same_v<T, string>)
+    {
+        return value == "stop";
+    }
+    else
+    {
+        return value == static_cast<T>(-1);
+    }
+}
+
+template <typename T>
+void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
+{
     char choice{};
-    cout << "Would you like to use randomly generated values to populate the BST? (y/n)";
+    cout << "Would you like to use randomly generated values to populate the BST? (y/n)\n";
     cin >> choice;
 
     if (choice == 'y')
     {
-        bstFiller(BST);
+        if constexpr (!is_same_v<T, string>)
+        {
+            bstFiller(BST);
+        }
+        else
+        {
+            bstStringFiller(BST, words);
+        }
     }
     else
     {
-        cout << "Enter values to insert into the BST. Enter -1 to stop :D\n";
+        cout << "Enter values to insert into the BST. type 'stop' if using strings or '-1' if using numeric types\n";
 
         while (true)
         {
-            float value;
+            T value;
             cin >> value;
-            if (value == -1)
+            if (terminateValue(value))
                 break;
+
             cout << "\n\n\n\n\n";
 
             BST.insertNode(value);
@@ -203,13 +238,53 @@ int main()
     BST.postOrder();
     cout << endl;
 
-    cout << "Search for value 15, drumroll please..." << (BST.search(15) ? " FOUND!" : " NOT FOUND!") << endl;
+    if constexpr (is_arithmetic_v<T>)
+    {
+        cout << "Search for value 15, drumroll please..." << (BST.search(static_cast<T>(15)) ? " FOUND!" : " NOT FOUND!") << endl;
+    }
+
+    if constexpr (!is_arithmetic_v<T>)
+    {
+        cout << "Search for value 'Xanax', drumroll please..." << (BST.search("Xanax") ? " FOUND!" : " NOT FOUND!") << endl;
+    }
 
     cout << "Max Value: " << BST.maxValue() << endl;
     cout << "Min Value: " << BST.minValue() << endl;
 
     cout << "Completed BST: \n";
     BST.dispTree();
+}
+
+int main()
+{
+    int inputType;
+    cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n";
+    cin >> inputType;
+
+    if (inputType == 1)
+    {
+        BinarySearchTree<int> BST;
+        cout << "Selected <int>\n";
+        helperFunction(BST);
+    }
+    else if (inputType == 2)
+    {
+        BinarySearchTree<double> BST;
+        cout << "Selected <double>\n";
+        helperFunction(BST);
+    }
+    else if (inputType == 3)
+    {
+        BinarySearchTree<string> BST;
+        cout << "Selected <string>\n";
+        vector<string> words = randomWords("words.txt");
+        helperFunction(BST, words);
+    }
+    else
+    {
+        cout << "improper response. bye!\n";
+        return 1;
+    }
 
     return 0;
 }

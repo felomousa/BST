@@ -26,6 +26,7 @@ $(TARGET): $(OBJS)
 
 # Run the target executable
 run:
+	@clear
 	@./$(TARGET)
 
 # Clean up build files
