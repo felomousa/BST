@@ -208,7 +208,7 @@ bool terminateValue(const T &value)
 }
 
 template <typename T>
-void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
+void helperFunction(BinarySearchTree<T> &BST, bool isChar = false, const vector<string> &words = {})
 {
     char choice{};
     cout << "Would you like to use randomly generated values to populate the BST? (y/n)\n";
@@ -216,16 +216,24 @@ void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
 
     if (choice == 'y')
     {
-        if constexpr (!is_same_v<T, string>)
-        {
-            bstFiller(BST);
-        }
-        else
+        if constexpr (is_same_v<T, string>)
         {
             bstStringFiller(BST, words);
         }
+        else if (isChar)
+        {
+            for (int i = 0; i < 5; ++i)
+            {
+                char randomChar = 'a' + rand() % 26;
+                BST.insertNode(randomChar);
+            }
+        }
+        else
+        {
+            bstFiller(BST);
+        }
     }
-    else
+    else if (choice == 'n')
     {
         cout << "Enter values to insert into the BST. type 'stop' if using strings or '-1' if using numeric types\n";
 
@@ -243,6 +251,11 @@ void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
             cout << endl;
         }
     }
+    else
+    {
+        cout << "improper response, bye!";
+        return;
+    }
 
     cout << endl;
     cout << "In-order traversal:" << endl; // Ascending Order
@@ -259,12 +272,18 @@ void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
 
     if constexpr (is_arithmetic_v<T>)
     {
-        cout << "Search for value 15, drumroll please..." << (BST.search(static_cast<T>(15)) ? " FOUND!" : " NOT FOUND!") << endl;
+        if (isChar)
+        {
+            cout << "Search for value 'z', drumroll please..." << (BST.search('z') ? " FOUND!" : " NOT FOUND!") << endl;
+        }
+        else
+        {
+            cout << "Search for value 15, drumroll please..." << (BST.search(static_cast<T>(15)) ? " FOUND!" : " NOT FOUND!") << endl;
+        }
     }
-
-    if constexpr (!is_arithmetic_v<T>)
+    else
     {
-        cout << "Search for value 'Xanax', drumroll please..." << (BST.search("Xanax") ? " FOUND!" : " NOT FOUND!") << endl;
+        cout << "Search for value 'z', drumroll please..." << (BST.search("z") ? " FOUND!" : " NOT FOUND!") << endl;
     }
 
     cout << "Max Value: " << BST.maxValue() << endl;
@@ -277,7 +296,7 @@ void helperFunction(BinarySearchTree<T> &BST, const vector<string> &words = {})
 int main()
 {
     int inputType;
-    cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n";
+    cout << "Choose a data type (by selecting the number): \n1. int\n2. double\n3. stirng \n4. char\n";
     cin >> inputType;
 
     if (inputType == 1)
@@ -297,7 +316,13 @@ int main()
         BinarySearchTree<string> BST;
         cout << "Selected <string>\n";
         vector<string> words = randomWords("words.txt");
-        helperFunction(BST, words);
+        helperFunction(BST, false, words);
+    }
+    else if (inputType == 4)
+    {
+        BinarySearchTree<char> BST;
+        cout << "Selected <char>\n";
+        helperFunction(BST, true);
     }
     else
     {
